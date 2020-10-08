@@ -25,7 +25,7 @@ public class CommentWriteActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                returnToMain();
             }
         });
 
@@ -33,7 +33,7 @@ public class CommentWriteActivity extends AppCompatActivity {
         cancleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                returnToMain();
+                finish();
             }
         });
 

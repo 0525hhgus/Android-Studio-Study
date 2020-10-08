@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 public class CommentitemView extends LinearLayout {
+
     TextView userIdView;
     TextView userTimeView;
     TextView userComment;
@@ -52,4 +53,6 @@ public class CommentitemView extends LinearLayout {
     public void setUserImageView(int resId) {
         userImageView.setImageResource(resId);
     }
+
+
 }

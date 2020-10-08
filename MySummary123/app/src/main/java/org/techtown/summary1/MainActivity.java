@@ -17,6 +17,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    RatingBar ratingBar;
+
     TextView likeCountView;
     Button likeButton;
     TextView hateCountView;
@@ -34,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
 
         likeCountView = (TextView) findViewById(R.id.likeCountView);
         likeButton = (Button) findViewById(R.id.likeButton);
@@ -76,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         listView = (ListView) findViewById(R.id.listView);
-        CommentAdapter adapter = new CommentAdapter();
+        final CommentAdapter adapter = new CommentAdapter();
         adapter.addItem(new CommentItem("kym71**", "10분전", "적당히 재밌다. 오랜만에 잠 안오는 영화 봤네요.", R.drawable.user1));
         adapter.addItem(new CommentItem("kym72**", "20분전", "적당히 재밌다. 오랜만에 잠 안오는 영화 봤네요.", R.drawable.user1));
         adapter.addItem(new CommentItem("kym71**", "10분전", "적당히 재밌다. 오랜만에 잠 안오는 영화 봤네요.", R.drawable.user1));
@@ -101,13 +105,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "모두보기 선택", Toast.LENGTH_LONG).show();
+                showCommentListActivity(adapter);
             }
         });
 
     }
 
     public void showCommentWriteActivity() {
+        float rating = ratingBar.getRating();
+
         Intent intent = new Intent(getApplicationContext(), CommentWriteActivity.class);
+        intent.putExtra("rating", rating);
         startActivityForResult(intent, 101);
     }
 
@@ -180,6 +188,24 @@ public class MainActivity extends AppCompatActivity {
         hateCountView.setText(String.valueOf(hateCount));
 
         hateButton.setBackgroundResource(R.drawable.thumb_down);
+    }
+
+    public void showCommentListActivity(CommentAdapter adapter) {
+
+        Intent intent = new Intent(getApplicationContext(), CommentListActivity.class);
+        startActivityForResult(intent, 102);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        if (requestCode == 101) {
+            if (intent != null) {
+                String contents = intent.getStringExtra("contents");
+                //outputView.setText(contents);
+            }
+        }
     }
 
 }
