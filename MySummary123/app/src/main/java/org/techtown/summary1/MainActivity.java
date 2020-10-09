@@ -14,9 +14,13 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Comment;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    CommentAdapter adapter = new CommentAdapter();
+
     RatingBar ratingBar;
 
     TextView likeCountView;
@@ -80,15 +84,16 @@ public class MainActivity extends AppCompatActivity {
         });
 
         listView = (ListView) findViewById(R.id.listView);
-        final CommentAdapter adapter = new CommentAdapter();
-        adapter.addItem(new CommentItem("kym71**", "10분전", "적당히 재밌다. 오랜만에 잠 안오는 영화 봤네요.", R.drawable.user1));
-        adapter.addItem(new CommentItem("kym72**", "20분전", "적당히 재밌다. 오랜만에 잠 안오는 영화 봤네요.", R.drawable.user1));
-        adapter.addItem(new CommentItem("kym71**", "10분전", "적당히 재밌다. 오랜만에 잠 안오는 영화 봤네요.", R.drawable.user1));
-        adapter.addItem(new CommentItem("kym72**", "20분전", "적당히 재밌다. 오랜만에 잠 안오는 영화 봤네요.", R.drawable.user1));
-        adapter.addItem(new CommentItem("kym71**", "10분전", "적당히 재밌다. 오랜만에 잠 안오는 영화 봤네요.", R.drawable.user1));
-        adapter.addItem(new CommentItem("kym72**", "20분전", "적당히 재밌다. 오랜만에 잠 안오는 영화 봤네요.", R.drawable.user1));
-        adapter.addItem(new CommentItem("kym71**", "10분전", "적당히 재밌다. 오랜만에 잠 안오는 영화 봤네요.", R.drawable.user1));
-        adapter.addItem(new CommentItem("kym72**", "20분전", "적당히 재밌다. 오랜만에 잠 안오는 영화 봤네요.", R.drawable.user1));
+
+
+        adapter.addItem(new CommentItem("kym71**", "10분전", "적당히 재밌다. 오랜만에 잠 안오는 영화 봤네요.", R.drawable.user1, 1));
+        adapter.addItem(new CommentItem("kym72**", "20분전", "적당히 재밌다. 오랜만에 잠 안오는 영화 봤네요.", R.drawable.user1, 2));
+        adapter.addItem(new CommentItem("kym71**", "10분전", "적당히 재밌다. 오랜만에 잠 안오는 영화 봤네요.", R.drawable.user1, 3));
+        adapter.addItem(new CommentItem("kym72**", "20분전", "적당히 재밌다. 오랜만에 잠 안오는 영화 봤네요.", R.drawable.user1, 4));
+        adapter.addItem(new CommentItem("kym71**", "10분전", "적당히 재밌다. 오랜만에 잠 안오는 영화 봤네요.", R.drawable.user1, 5));
+        adapter.addItem(new CommentItem("kym72**", "20분전", "적당히 재밌다. 오랜만에 잠 안오는 영화 봤네요.", R.drawable.user1, (float)1.5));
+        adapter.addItem(new CommentItem("kym71**", "10분전", "적당히 재밌다. 오랜만에 잠 안오는 영화 봤네요.", R.drawable.user1, (float)2.5));
+        adapter.addItem(new CommentItem("kym72**", "20분전", "적당히 재밌다. 오랜만에 잠 안오는 영화 봤네요.", R.drawable.user1, (float)3.5));
         listView.setAdapter(adapter);
 
         Button write = (Button) findViewById(R.id.write);
@@ -105,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "모두보기 선택", Toast.LENGTH_LONG).show();
-                showCommentListActivity(adapter);
+                showCommentListActivity();
             }
         });
 
@@ -118,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("rating", rating);
         startActivityForResult(intent, 101);
     }
-
 
     class CommentAdapter extends BaseAdapter {
         ArrayList<CommentItem> items = new ArrayList<CommentItem>();
@@ -157,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
             view.setUserTimeView(item.getTime());
             view.setUserComment(item.getComment());
             view.setUserImageView(item.getResId());
+            view.setUserRating(item.getRating());
 
             return view;
         }
@@ -190,9 +195,10 @@ public class MainActivity extends AppCompatActivity {
         hateButton.setBackgroundResource(R.drawable.thumb_down);
     }
 
-    public void showCommentListActivity(CommentAdapter adapter) {
-
-        Intent intent = new Intent(getApplicationContext(), CommentListActivity.class);
+    public void showCommentListActivity() {
+        CommentAdapter commentAdapter = new CommentAdapter();
+        Intent intent = new Intent(MainActivity.this, CommentListActivity.class);
+        intent.putExtra("commnetAdapter", commentAdapter);
         startActivityForResult(intent, 102);
     }
 
@@ -203,7 +209,10 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 101) {
             if (intent != null) {
                 String contents = intent.getStringExtra("contents");
-                //outputView.setText(contents);
+                float rating = intent.getFloatExtra("rating", 0);
+                final CommentAdapter adapter = new CommentAdapter();
+                adapter.addItem(new CommentItem("kym71**", "10분전", contents, R.drawable.user1, rating));
+                listView.setAdapter(adapter);
             }
         }
     }

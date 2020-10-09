@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -15,6 +16,7 @@ public class CommentitemView extends LinearLayout {
     TextView userTimeView;
     TextView userComment;
     ImageView userImageView;
+    RatingBar userRatingView;
 
     public CommentitemView(Context context) {
         super(context);
@@ -36,6 +38,7 @@ public class CommentitemView extends LinearLayout {
         userTimeView = (TextView) findViewById(R.id.userTimeView);
         userComment = (TextView) findViewById(R.id.userComment);
         userImageView = (ImageView) findViewById(R.id.userImageView);
+        userRatingView = (RatingBar) findViewById(R.id.ratingBar);
     }
 
     public void setUserIdView(String userId) {
@@ -50,9 +53,7 @@ public class CommentitemView extends LinearLayout {
         userComment.setText(comment);
     }
 
-    public void setUserImageView(int resId) {
-        userImageView.setImageResource(resId);
-    }
+    public void setUserImageView(int resId) { userImageView.setImageResource(resId); }
 
-
+    public void setUserRating(float userRating) {userRatingView.setRating(userRating); }
 }

@@ -5,9 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
+
+import java.util.ArrayList;
 
 public class CommentWriteActivity extends AppCompatActivity {
     RatingBar ratingBar;
@@ -25,7 +29,8 @@ public class CommentWriteActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                returnToMain();
+                Intent intent = getIntent();
+                returnToMain(intent);
             }
         });
 
@@ -37,8 +42,51 @@ public class CommentWriteActivity extends AppCompatActivity {
             }
         });
 
+
         Intent intent = getIntent();
         processIntent(intent);
+    }
+
+    class CommentAdapter extends BaseAdapter {
+        ArrayList<CommentItem> items = new ArrayList<CommentItem>();
+
+        @Override
+        public int getCount() {
+            return items.size();
+        }
+
+        public void addItem(CommentItem item) {
+            items.add(item);
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return items.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            CommentitemView view = null;
+            if (view == null) {
+                view = new CommentitemView(getApplicationContext());
+            } else {
+                view = (CommentitemView) view;
+            }
+
+            CommentItem item = items.get(position);
+            view.setUserIdView(item.getId());
+            view.setUserTimeView(item.getTime());
+            view.setUserComment(item.getComment());
+            view.setUserImageView(item.getResId());
+
+            return view;
+        }
     }
 
     private void processIntent(Intent intent) {
@@ -48,11 +96,12 @@ public class CommentWriteActivity extends AppCompatActivity {
         }
     }
 
-    public void returnToMain() {
+    public void returnToMain(Intent ratingIntent) {
         String contents = contentsInput.getText().toString();
 
         Intent intent = new Intent();
         intent.putExtra("contents", contents);
+        intent.putExtra("rating", ratingBar.getRating());
 
         setResult(RESULT_OK, intent);
 

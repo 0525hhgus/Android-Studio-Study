@@ -5,12 +5,14 @@ public class CommentItem {
     String time;
     String comment;
     int resId;
+    float rating;
 
-    public CommentItem(String id, String time, String comment, int resId) {
+    public CommentItem(String id, String time, String comment, int resId, float rating) {
         this.id = id;
         this.time = time;
         this.comment = comment;
         this.resId = resId;
+        this.rating = rating;
     }
 
     public String getId() {
@@ -43,6 +45,14 @@ public class CommentItem {
 
     public void setResId(int resId) {
         this.resId = resId;
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
     }
 
     @Override
